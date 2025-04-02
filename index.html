@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Photo Uploader</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f9f7f7;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(to right, #f8e1e1, #f9f7f7);
+            border-bottom: 1px solid #eee;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+            color: #d4a5a5;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            color: #888;
+        }
+        
+        /* Upload Section */
+        .upload-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .upload-btn {
+            background-color: #d4a5a5;
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .upload-btn:hover {
+            background-color: #c49090;
+        }
+        
+        #file-input {
+            display: none;
+        }
+        
+        #upload-status {
+            margin-top: 20px;
+            color: #666;
+            min-height: 24px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            max-width: 300px;
+            margin: 15px auto;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            height: 20px;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #d4a5a5;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .instructions h2 {
+            color: #d4a5a5;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ol {
+            margin-left: 25px;
+        }
+        
+        .instructions li {
+            margin-bottom: 12px;
+        }
+        
+        /* Uploads preview */
+        .upload-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .preview-item {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .preview-item .success-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .preview-item.uploaded .success-indicator {
+            opacity: 1;
+            background-color: rgba(46, 125, 50, 0.7);
+        }
+        
+        .preview-item.error .success-indicator {
+            opacity: 1;
+            background-color: rgba(198, 40, 40, 0.7);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* Success animation */
+        @keyframes success-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .success-animation {
+            animation: success-pulse 0.5s ease-in-out;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .upload-section {
+                padding: 20px;
+            }
+            
+            .instructions {
+                padding: 20px;
+            }
+            
+            .upload-btn {
+                padding: 14px 25px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Wedding Photo Uploader</h1>
+            <p>Share your precious moments with the newlyweds</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="upload-section">
+            <h2>Upload Your Photos</h2>
+            <p>We'd love to see all of your memories from our special day</p>
+            <input type="file" id="file-input" accept="image/*" multiple>
+            <button class="upload-btn" id="upload-btn">Select Photos</button>
+            <div class="progress-container" id="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <p id="upload-status"></p>
+            <div class="upload-preview" id="upload-preview"></div>
+        </div>
+        
+        <div class="instructions">
+            <h2>How It Works</h2>
+            <ol>
+                <li>Click on the "Select Photos" button above</li>
+                <li>Choose one or more photos from your device's gallery</li>
+                <li>Wait for the upload to complete</li>
+                <li>That's it! Your photos have been shared with the couple</li>
+                <li>Thank you for helping preserve these special memories!</li>
+            </ol>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>Created with love for [Couple's Names] Wedding - [Wedding Date]</p>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        const CLOUDINARY_CLOUD_NAME = 'dsr66t6hh'; // Replace with your cloud name
+        const CLOUDINARY_UPLOAD_PRESET = 'wedding_photos'; // Replace with your upload preset
+        
+        // DOM Elements
+        const fileInput = document.getElementById('file-input');
+        const uploadBtn = document.getElementById('upload-btn');
+        const uploadStatus = document.getElementById('upload-status');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const uploadPreview = document.getElementById('upload-preview');
+        
+        // Event Listeners
+        uploadBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileUpload);
+        
+        // Handle file upload
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            
+            if (files.length === 0) {
+                return;
+            }
+            
+            // Filter for valid image files
+            const validFiles = Array.from(files).filter(file => file.type.match('image.*'));
+            
+            if (validFiles.length === 0) {
+                uploadStatus.textContent = 'Please select image files only';
+                return;
+            }
+            
+            // Clear previous preview
+            uploadPreview.innerHTML = '';
+            
+            // Display preview of selected images
+            validFiles.forEach((file, index) => {
+                addPreviewItem(file, index);
+            });
+            
+            // Set up upload process
+            uploadStatus.textContent = `Preparing to upload ${validFiles.length} photo(s)...`;
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            uploadBtn.disabled = true;
+            
+            let uploadedCount = 0;
+            let errorCount = 0;
+            
+            // Process each file
+            validFiles.forEach((file, index) => {
+                // Create FormData
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                formData.append('folder', 'wedding_gallery');
+                
+                // Update status
+                uploadStatus.textContent = `Uploading photo ${index+1} of ${validFiles.length}`;
+                
+                // Get preview item
+                const previewItem = document.getElementById(`preview-${index}`);
+                
+                // Upload to Cloudinary
+                fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Update counters
+                    uploadedCount++;
+                    
+                    // Mark preview as uploaded
+                    if (previewItem) {
+                        previewItem.classList.add('uploaded');
+                        previewItem.querySelector('.success-indicator').innerHTML = '✓';
+                    }
+                    
+                    // Update progress
+                    const percentComplete = (uploadedCount + errorCount) / validFiles.length * 100;
+                    progressBar.style.width = `${percentComplete}%`;
+                    
+                    // Update status
+                    uploadStatus.textContent = `Uploaded ${uploadedCount} of ${validFiles.length} photos`;
+                    
+                    // Check if all uploads complete
+                    if (uploadedCount + errorCount === validFiles.length) {
+                        completeUpload(uploadedCount, errorCount, validFiles.length);
+                    }
+                })
+                .catch(error => {
+                    // Update counters
+                    errorCount++;
+                    console.error('Upload error:', error);
+                    
+                    // Mark preview as error
+                    if (previewItem) {
+                        previewItem.classList.add('error');
+                        previewItem.querySelector('.success-indicator').innerHTML = '✗';
+                    }
+                    
+                    // Update progress
+                    const percentComplete = (uploadedCount + errorCount) / validFiles.length * 100;
+                    progressBar.style.width = `${percentComplete}%`;
+                    
+                    // Check if all uploads complete
+                    if (uploadedCount + errorCount === validFiles.length) {
+                        completeUpload(uploadedCount, errorCount, validFiles.length);
+                    }
+                });
+            });
+            
+            // Reset file input to allow selecting the same files again
+            fileInput.value = '';
+        }
+        
+        // Add preview item
+        function addPreviewItem(file, index) {
+            const reader = new FileReader();
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.id = `preview-${index}`;
+            
+            // Create preview image
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewItem.appendChild(img);
+                
+                // Add success indicator
+                const successIndicator = document.createElement('div');
+                successIndicator.className = 'success-indicator';
+                previewItem.appendChild(successIndicator);
+            };
+            
+            // Read file as data URL
+            reader.readAsDataURL(file);
+            
+            // Add to preview container
+            uploadPreview.appendChild(previewItem);
+        }
+        
+        // Complete upload process
+        function completeUpload(successCount, errorCount, totalCount) {
+            // Update UI for completed upload
+            if (errorCount === 0) {
+                uploadStatus.textContent = `Success! All ${successCount} photos uploaded.`;
+                uploadStatus.style.color = '#4CAF50';
+                uploadStatus.classList.add('success-animation');
+                
+                // Reset color after animation
+                setTimeout(() => {
+                    uploadStatus.style.color = '';
+                    uploadStatus.classList.remove('success-animation');
+                }, 3000);
+            } else if (successCount === 0) {
+                uploadStatus.textContent = `Error: Failed to upload any photos.`;
+                uploadStatus.style.color = '#F44336';
+            } else {
+                uploadStatus.textContent = `Uploaded ${successCount} photos with ${errorCount} errors.`;
+                uploadStatus.style.color = '#FF9800';
+            }
+            
+            // Hide progress bar after delay
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                progressBar.style.width = '0%';
+            }, 2000);
+            
+            // Re-enable upload button
+            uploadBtn.disabled = false;
+        }
+    </script>
+</body>
+</html>
