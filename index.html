@@ -1,22 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding Photo Uploader</title>
+    <title>Zdjęcia Ślubne</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         /* Global Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
         }
         
         body {
-            background-color: #f9f7f7;
-            color: #333;
+            background-color: #fff;
+            color: #5a5a5a;
             line-height: 1.6;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6Ii8+PGNpcmNsZSBmaWxsPSIjRjlGOUY5IiBjeD0iMiIgY3k9IjIiIHI9IjEiLz48L2c+PC9zdmc+');
         }
         
         .container {
@@ -28,21 +33,57 @@
         /* Header */
         header {
             text-align: center;
-            padding: 30px 0;
-            background: linear-gradient(to right, #f8e1e1, #f9f7f7);
-            border-bottom: 1px solid #eee;
-            margin-bottom: 30px;
+            padding: 40px 0 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .floral-corner {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0.7;
+        }
+        
+        .floral-top-left {
+            top: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMEMzMCA0MCA3MCAtNSAxMDAgMzBDMTMwIDUwIDk1IDEwMCA1NSAxMjBDMTUgMTQwIC0xMCA3MCAwIDBaIiBmaWxsPSIjRjhFOEVDIi8+PHBhdGggZD0iTTAgMEMzMCA0MCA3MCAtNSAxMDAgMzBDMTMwIDUwIDk1IDEwMCA1NSAxMjBDMTUgMTQwIC0xMCA3MCAwIDBaIiBmaWxsPSIjRjhFOEVDIi8+PHBhdGggZD0iTTI1IDI1QzQwIDQwIDUwIDIwIDY1IDMwQzgwIDQwIDYwIDcwIDQwIDgwQzIwIDkwIDEwIDUwIDI1IDI1WiIgZmlsbD0iI0Y4RTBFNSIvPjxwYXRoIGQ9Ik0zNSA0NUw1MCAzNUw2NSA2MEw0NSA3MFoiIGZpbGw9IiNGNkQxREIiLz48cGF0aCBkPSJNNjAgMzBDNzUgMjAgOTAgMzAgOTUgNTBDMTAwIDcwIDg1IDkwIDY1IDg1QzQ1IDgwIDQ1IDQwIDYwIDMwWiIgZmlsbD0iI0UwRjJFOCIvPjwvc3ZnPg==');
+            transform: rotate(0deg);
+        }
+        
+        .floral-top-right {
+            top: 0;
+            right: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE1MCAwQzEyMCA0MCA4MCAtNSA1MCAzMEMyMCA1MCA1NSAxMDAgOTUgMTIwQzEzNSAxNDAgMTYwIDcwIDE1MCAwWiIgZmlsbD0iI0Y4RThFQyIvPjxwYXRoIGQ9Ik0xNTAgMEMxMjAgNDAgODAgLTUgNTAgMzBDMjAgNTAgNTUgMTAwIDk1IDEyMEMxMzUgMTQwIDE2MCA3MCAxNTAgMFoiIGZpbGw9IiNGOEU4RUMiLz48cGF0aCBkPSJNMTI1IDI1QzExMCA0MCAxMDAgMjAgODUgMzBDNzAgNDAgOTAgNzAgMTEwIDgwQzEzMCA5MCAxNDAgNTAgMTI1IDI1WiIgZmlsbD0iI0Y4RTBFNSIvPjxwYXRoIGQ9Ik0xMTUgNDVMMTAwIDM1TDg1IDYwTDEwNSA3MFoiIGZpbGw9IiNGNkQxREIiLz48cGF0aCBkPSJNOTAgMzBDNzUgMjAgNjAgMzAgNTUgNTBDNTAgNzAgNjUgOTAgODUgODVDMTA1IDgwIDEwNSA0MCA5MCAzMFoiIGZpbGw9IiNFMEYyRTgiLz48L3N2Zz4=');
+            transform: rotate(0deg);
+        }
+        
+        .floral-bottom-left {
+            bottom: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMTUwQzMwIDExMCA3MCAxNTUgMTAwIDEyMEMxMzAgMTAwIDk1IDUwIDU1IDMwQzE1IDEwIC0xMCA4MCAwIDE1MFoiIGZpbGw9IiNGOEU4RUMiLz48cGF0aCBkPSJNMCAxNTBDMzAgMTEwIDcwIDE1NSAxMDAgMTIwQzEzMCAxMDAgOTUgNTAgNTUgMzBDMTUgMTAgLTEwIDgwIDAgMTUwWiIgZmlsbD0iI0Y4RThFQyIvPjxwYXRoIGQ9Ik0yNSAxMjVDNDAgMTEwIDUwIDEzMCA2NSAxMjBDODAgMTEwIDYwIDgwIDQwIDcwQzIwIDYwIDEwIDEwMCAyNSAxMjVaIiBmaWxsPSIjRjhFMEU1Ii8+PHBhdGggZD0iTTM1IDEwNUw1MCAxMTVMNjUgOTBMNDUgODBaIiBmaWxsPSIjRjZEMURCIi8+PHBhdGggZD0iTTYwIDEyMEM3NSAxMzAgOTAgMTIwIDk1IDEwMEMxMDAgODAgODUgNjAgNjUgNjVDNDUgNzAgNDUgMTEwIDYwIDEyMFoiIGZpbGw9IiNFMEYyRTgiLz48L3N2Zz4=');
+            transform: rotate(0deg);
+        }
+        
+        .floral-bottom-right {
+            bottom: 0;
+            right: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE1MCAxNTBDMTIwIDExMCA4MCAxNTUgNTAgMTIwQzIwIDEwMCA1NSA1MCA5NSAzMEMxMzUgMTAgMTYwIDgwIDE1MCAxNTBaIiBmaWxsPSIjRjhFOEVDIi8+PHBhdGggZD0iTTE1MCAxNTBDMTIwIDExMCA4MCAxNTUgNTAgMTIwQzIwIDEwMCA1NSA1MCA5NSAzMEMxMzUgMTAgMTYwIDgwIDE1MCAxNTBaIiBmaWxsPSIjRjhFOEVDIi8+PHBhdGggZD0iTTEyNSAxMjVDMTEwIDExMCAxMDAgMTMwIDg1IDEyMEM3MCAxMTAgOTAgODAgMTEwIDcwQzEzMCA2MCAxNDAgMTAwIDEyNSAxMjVaIiBmaWxsPSIjRjhFMEU1Ii8+PHBhdGggZD0iTTExNSAxMDVMMTAwIDExNUw4NSA5MEwxMDUgODBaIiBmaWxsPSIjRjZEMURCIi8+PHBhdGggZD0iTTkwIDEyMEM3NSAxMzAgNjAgMTIwIDU1IDEwMEM1MCA4MCA2NSA2MCA4NSA2NUMxMDUgNzAgMTA1IDExMCA5MCAxMjBaIiBmaWxsPSIjRTBGMkU4Ii8+PC9zdmc+');
+            transform: rotate(0deg);
         }
         
         header h1 {
-            font-size: 2rem;
-            color: #d4a5a5;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.8rem;
+            color: #c1a173;
             margin-bottom: 10px;
+            font-weight: normal;
         }
         
         header p {
-            font-size: 1.1rem;
-            color: #888;
+            font-size: 1.2rem;
+            color: #777;
         }
         
         /* Upload Section */
@@ -51,26 +92,47 @@
             border-radius: 10px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #f3e6e8;
+        }
+        
+        .upload-section h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: #c1a173;
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
+        
+        .upload-section p {
+            font-size: 1.2rem;
+            color: #777;
+            margin-bottom: 25px;
         }
         
         .upload-btn {
-            background-color: #d4a5a5;
-            color: white;
-            border: none;
+            background-color: white;
+            color: #c1a173;
+            border: 1px solid #c1a173;
             padding: 16px 30px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             margin: 20px 0;
             width: 100%;
             max-width: 300px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
         
         .upload-btn:hover {
-            background-color: #c49090;
+            background-color: #c1a173;
+            color: white;
         }
         
         #file-input {
@@ -81,23 +143,25 @@
             margin-top: 20px;
             color: #666;
             min-height: 24px;
+            font-size: 1.1rem;
         }
         
         .progress-container {
             width: 100%;
             max-width: 300px;
             margin: 15px auto;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            height: 20px;
+            background-color: #f8f0f2;
+            border-radius: 30px;
+            height: 10px;
             display: none;
+            overflow: hidden;
         }
         
         .progress-bar {
             height: 100%;
             width: 0;
-            background-color: #d4a5a5;
-            border-radius: 5px;
+            background-color: #e9c4c7;
+            border-radius: 30px;
             transition: width 0.3s;
         }
         
@@ -107,28 +171,38 @@
             border-radius: 10px;
             padding: 30px;
             margin-top: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #f3e6e8;
         }
         
         .instructions h2 {
-            color: #d4a5a5;
-            margin-bottom: 15px;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: #c1a173;
+            margin-bottom: 20px;
+            font-weight: normal;
+            text-align: center;
         }
         
         .instructions ol {
             margin-left: 25px;
+            font-size: 1.1rem;
+            color: #666;
         }
         
         .instructions li {
             margin-bottom: 12px;
+            padding-left: 10px;
         }
         
         /* Uploads preview */
         .upload-preview {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-top: 25px;
             justify-content: center;
         }
         
@@ -138,7 +212,8 @@
             position: relative;
             border-radius: 5px;
             overflow: hidden;
-            background-color: #f0f0f0;
+            border: 1px solid #f3e6e8;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
         .preview-item img {
@@ -165,7 +240,7 @@
         
         .preview-item.uploaded .success-indicator {
             opacity: 1;
-            background-color: rgba(46, 125, 50, 0.7);
+            background-color: rgba(193, 161, 115, 0.7);
         }
         
         .preview-item.error .success-indicator {
@@ -177,57 +252,72 @@
         footer {
             text-align: center;
             margin-top: 50px;
-            padding: 20px;
-            color: #888;
-            font-size: 0.9rem;
+            padding: 30px 20px;
+            color: #999;
+            font-size: 1rem;
+            position: relative;
+        }
+        
+        footer p {
+            position: relative;
+            z-index: 1;
         }
         
         /* Success animation */
         @keyframes success-pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
         
         .success-animation {
-            animation: success-pulse 0.5s ease-in-out;
+            animation: success-pulse 0.8s ease-in-out;
         }
         
         /* Responsive styles */
         @media (max-width: 600px) {
             header h1 {
-                font-size: 1.8rem;
+                font-size: 2.4rem;
             }
             
-            .upload-section {
-                padding: 20px;
+            .upload-section, .instructions {
+                padding: 25px 20px;
             }
             
-            .instructions {
-                padding: 20px;
+            .floral-corner {
+                width: 100px;
+                height: 100px;
             }
             
             .upload-btn {
                 padding: 14px 25px;
-                font-size: 1.1rem;
+                font-size: 1rem;
+            }
+            
+            .upload-section h2, .instructions h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
+        <div class="floral-corner floral-top-left"></div>
+        <div class="floral-corner floral-top-right"></div>
         <div class="container">
-            <h1>Wedding Photo Uploader</h1>
-            <p>Share your precious moments with the newlyweds</p>
+            <h1>Zdjęcia Ślubne</h1>
+            <p>Podziel się wspaniałymi chwilami z nowożeńcami</p>
         </div>
     </header>
     
     <div class="container">
         <div class="upload-section">
-            <h2>Upload Your Photos</h2>
-            <p>We'd love to see all of your memories from our special day</p>
+            <div class="floral-corner floral-bottom-left"></div>
+            <div class="floral-corner floral-bottom-right"></div>
+            <h2>Dodaj Swoje Zdjęcia</h2>
+            <p>Chcielibyśmy zobaczyć wszystkie Wasze wspomnienia z naszego wyjątkowego dnia</p>
             <input type="file" id="file-input" accept="image/*" multiple>
-            <button class="upload-btn" id="upload-btn">Select Photos</button>
+            <button class="upload-btn" id="upload-btn">Wybierz Zdjęcia</button>
             <div class="progress-container" id="progress-container">
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
@@ -236,20 +326,24 @@
         </div>
         
         <div class="instructions">
-            <h2>How It Works</h2>
+            <div class="floral-corner floral-top-left"></div>
+            <div class="floral-corner floral-top-right"></div>
+            <h2>Jak To Działa</h2>
             <ol>
-                <li>Click on the "Select Photos" button above</li>
-                <li>Choose one or more photos from your device's gallery</li>
-                <li>Wait for the upload to complete</li>
-                <li>That's it! Your photos have been shared with the couple</li>
-                <li>Thank you for helping preserve these special memories!</li>
+                <li>Kliknij przycisk "Wybierz Zdjęcia" powyżej</li>
+                <li>Wybierz jedno lub więcej zdjęć z galerii swojego urządzenia</li>
+                <li>Poczekaj na zakończenie przesyłania</li>
+                <li>To wszystko! Twoje zdjęcia zostały udostępnione parze młodej</li>
+                <li>Dziękujemy za pomoc w zachowaniu tych wyjątkowych wspomnień!</li>
             </ol>
         </div>
     </div>
     
     <footer>
         <div class="container">
-            <p>Created with love for [Couple's Names] Wedding - [Wedding Date]</p>
+            <div class="floral-corner floral-top-left"></div>
+            <div class="floral-corner floral-top-right"></div>
+            <p>Created with love for Agnieszka and Oskar Wedding - 20.06.2025</p>
         </div>
     </footer>
 
@@ -282,7 +376,7 @@
             const validFiles = Array.from(files).filter(file => file.type.match('image.*'));
             
             if (validFiles.length === 0) {
-                uploadStatus.textContent = 'Please select image files only';
+                uploadStatus.textContent = 'Wybierz tylko pliki ze zdjęciami';
                 return;
             }
             
@@ -295,7 +389,7 @@
             });
             
             // Set up upload process
-            uploadStatus.textContent = `Preparing to upload ${validFiles.length} photo(s)...`;
+            uploadStatus.textContent = `Przygotowanie do przesłania ${validFiles.length} zdjęć...`;
             progressContainer.style.display = 'block';
             progressBar.style.width = '0%';
             uploadBtn.disabled = true;
@@ -312,7 +406,7 @@
                 formData.append('folder', 'wedding_gallery');
                 
                 // Update status
-                uploadStatus.textContent = `Uploading photo ${index+1} of ${validFiles.length}`;
+                uploadStatus.textContent = `Przesyłanie zdjęcia ${index+1} z ${validFiles.length}`;
                 
                 // Get preview item
                 const previewItem = document.getElementById(`preview-${index}`);
@@ -343,7 +437,7 @@
                     progressBar.style.width = `${percentComplete}%`;
                     
                     // Update status
-                    uploadStatus.textContent = `Uploaded ${uploadedCount} of ${validFiles.length} photos`;
+                    uploadStatus.textContent = `Przesłano ${uploadedCount} z ${validFiles.length} zdjęć`;
                     
                     // Check if all uploads complete
                     if (uploadedCount + errorCount === validFiles.length) {
@@ -406,8 +500,8 @@
         function completeUpload(successCount, errorCount, totalCount) {
             // Update UI for completed upload
             if (errorCount === 0) {
-                uploadStatus.textContent = `Success! All ${successCount} photos uploaded.`;
-                uploadStatus.style.color = '#4CAF50';
+                uploadStatus.textContent = `Sukces! Wszystkie ${successCount} zdjęć przesłano.`;
+                uploadStatus.style.color = '#c1a173';
                 uploadStatus.classList.add('success-animation');
                 
                 // Reset color after animation
@@ -416,11 +510,11 @@
                     uploadStatus.classList.remove('success-animation');
                 }, 3000);
             } else if (successCount === 0) {
-                uploadStatus.textContent = `Error: Failed to upload any photos.`;
-                uploadStatus.style.color = '#F44336';
+                uploadStatus.textContent = `Błąd: Nie udało się przesłać żadnych zdjęć.`;
+                uploadStatus.style.color = '#c64f4f';
             } else {
-                uploadStatus.textContent = `Uploaded ${successCount} photos with ${errorCount} errors.`;
-                uploadStatus.style.color = '#FF9800';
+                uploadStatus.textContent = `Przesłano ${successCount} zdjęć z ${errorCount} błędami.`;
+                uploadStatus.style.color = '#d9a977';
             }
             
             // Hide progress bar after delay
